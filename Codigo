@@ -1,0 +1,1220 @@
+const PLANILHA = SpreadsheetApp.getActiveSpreadsheet();
+
+
+// ==========================================
+// PRODUTOS E SABORES DA PIPODOCE
+// ==========================================
+
+const PRODUTOS_PIPODOCE = {
+
+  "Pipoca": [
+    "Caramelo",
+    "Leite Ninho",
+    "Ovomaltine",
+    "Nesquik",
+    "Nutella",
+    "Leite Condensado",
+    "Cocada",
+    "Ferrero Rocher",
+    "Cravejado"
+  ],
+
+  "Copo Bolha": [
+    "Bueno",
+    "Leitinho",
+    "Nutella"
+  ],
+
+  "Bowl": [
+    "Bueno",
+    "Leitinho",
+    "Nutella"
+  ]
+
+};
+
+
+// ==========================================
+// ABRIR APLICATIVO
+// ==========================================
+
+function doGet() {
+
+  return HtmlService
+    .createTemplateFromFile('index')
+    .evaluate()
+    .setTitle('PIPODOCE')
+    .setXFrameOptionsMode(
+      HtmlService.XFrameOptionsMode.ALLOWALL
+    );
+
+}
+
+
+// ==========================================
+// CONFIGURAR ESTOQUE V3
+// ==========================================
+
+function configurarEstoqueV3() {
+
+  let aba = PLANILHA.getSheetByName('ESTOQUE');
+
+  if (!aba) {
+    aba = PLANILHA.insertSheet('ESTOQUE');
+  }
+
+  aba.clearContents();
+
+  aba.getRange(1, 1, 1, 3).setValues([
+    ['Produto', 'Sabor', 'Quantidade']
+  ]);
+
+  const linhas = [];
+
+  Object.keys(PRODUTOS_PIPODOCE).forEach(function(produto) {
+
+    PRODUTOS_PIPODOCE[produto].forEach(function(sabor) {
+
+      linhas.push([
+        produto,
+        sabor,
+        0
+      ]);
+
+    });
+
+  });
+
+  if (linhas.length > 0) {
+
+    aba.getRange(
+      2,
+      1,
+      linhas.length,
+      3
+    ).setValues(linhas);
+
+  }
+
+  aba.getRange('A1:C1')
+    .setFontWeight('bold');
+
+  aba.autoResizeColumns(1, 3);
+
+  return 'Estoque V3 configurado com sucesso!';
+
+}
+
+
+// ==========================================
+// CONFIGURAR VENDAS V3
+// ==========================================
+
+function configurarVendasV3() {
+
+  const aba = PLANILHA.getSheetByName('VENDAS');
+
+  if (!aba) {
+    return 'Aba VENDAS não encontrada.';
+  }
+
+  const cabecalho =
+    aba.getRange(1, 1, 1, 8).getValues()[0];
+
+  if (cabecalho[4] !== 'Sabor') {
+    aba.insertColumnAfter(4);
+  }
+
+  aba.getRange(1, 1, 1, 8).setValues([
+
+    [
+      'ID',
+      'Data',
+      'Vendedor',
+      'Produto',
+      'Sabor',
+      'Quantidade',
+      'Valor',
+      'Pagamento'
+    ]
+
+  ]);
+
+  return 'Vendas V3 configuradas com sucesso!';
+
+}
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+function login(usuario, senha) {
+
+  const aba =
+    PLANILHA.getSheetByName('USUARIOS');
+
+  if (!aba) {
+
+    return {
+      sucesso: false,
+      mensagem:
+        'A aba USUARIOS não foi encontrada.'
+    };
+
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  for (
+    let i = 1;
+    i < dados.length;
+    i++
+  ) {
+
+    const nome = dados[i][1];
+    const user = dados[i][2];
+    const password = dados[i][3];
+
+    if (
+
+      String(user).trim() ===
+      String(usuario).trim()
+
+      &&
+
+      String(password).trim() ===
+      String(senha).trim()
+
+    ) {
+
+      return {
+
+        sucesso: true,
+
+        nome: nome,
+
+        usuario: user
+
+      };
+
+    }
+
+  }
+
+  return {
+
+    sucesso: false,
+
+    mensagem:
+      'Usuário ou senha incorretos.'
+
+  };
+
+}
+
+
+// ==========================================
+// OBTER PRODUTOS
+// ==========================================
+
+function obterProdutos() {
+
+  return PRODUTOS_PIPODOCE;
+
+}
+
+
+// ==========================================
+// RESUMO DO DASHBOARD
+// ==========================================
+
+function obterResumo() {
+
+  const vendas =
+    PLANILHA.getSheetByName('VENDAS');
+
+  const compras =
+    PLANILHA.getSheetByName('COMPRAS');
+
+  let totalVendas = 0;
+
+  let quantidadeVendida = 0;
+
+  let totalCompras = 0;
+
+  const hoje = new Date();
+
+
+  // VENDAS
+
+  if (vendas) {
+
+    const dados =
+      vendas.getDataRange().getValues();
+
+    for (
+      let i = 1;
+      i < dados.length;
+      i++
+    ) {
+
+      const data =
+        new Date(dados[i][1]);
+
+      if (mesmoDia(data, hoje)) {
+
+        quantidadeVendida +=
+          Number(dados[i][5]) || 0;
+
+        totalVendas +=
+          Number(dados[i][6]) || 0;
+
+      }
+
+    }
+
+  }
+
+
+  // COMPRAS
+
+  if (compras) {
+
+    const dados =
+      compras.getDataRange().getValues();
+
+    for (
+      let i = 1;
+      i < dados.length;
+      i++
+    ) {
+
+      const data =
+        new Date(dados[i][1]);
+
+      if (mesmoDia(data, hoje)) {
+
+        totalCompras +=
+          Number(dados[i][4]) || 0;
+
+      }
+
+    }
+
+  }
+
+
+  return {
+
+    vendas: totalVendas,
+
+    quantidade: quantidadeVendida,
+
+    compras: totalCompras
+
+  };
+
+}
+
+
+// ==========================================
+// REGISTRAR VENDA
+// ==========================================
+
+function registrarVenda(
+  usuario,
+  produto,
+  sabor,
+  quantidade,
+  valor,
+  pagamento
+) {
+
+  const aba =
+    PLANILHA.getSheetByName('VENDAS');
+
+  if (!aba) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Aba VENDAS não encontrada.'
+
+    };
+
+  }
+
+  quantidade =
+    Number(quantidade);
+
+  valor =
+    Number(valor);
+
+
+  if (!produto) {
+
+    return {
+      sucesso: false,
+      mensagem:
+        'Selecione o produto.'
+    };
+
+  }
+
+
+  if (!sabor) {
+
+    return {
+      sucesso: false,
+      mensagem:
+        'Selecione o sabor.'
+    };
+
+  }
+
+
+  if (
+    !quantidade ||
+    quantidade <= 0
+  ) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Informe uma quantidade válida.'
+
+    };
+
+  }
+
+
+  if (
+    !valor ||
+    valor <= 0
+  ) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Informe o valor da venda.'
+
+    };
+
+  }
+
+
+  if (!pagamento) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Selecione a forma de pagamento.'
+
+    };
+
+  }
+
+
+  // VERIFICAR ESTOQUE
+
+  const estoque =
+    obterEstoqueProduto(
+      produto,
+      sabor
+    );
+
+
+  if (quantidade > estoque) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Estoque insuficiente. ' +
+        produto +
+        ' / ' +
+        sabor +
+        ' possui apenas ' +
+        estoque +
+        ' unidade(s).'
+
+    };
+
+  }
+
+
+  // ID
+
+  const id =
+    aba.getLastRow();
+
+
+  // REGISTRAR VENDA
+
+  aba.appendRow([
+
+    id,
+
+    new Date(),
+
+    usuario,
+
+    produto,
+
+    sabor,
+
+    quantidade,
+
+    valor,
+
+    pagamento
+
+  ]);
+
+
+  // BAIXAR ESTOQUE
+
+  atualizarEstoqueProduto(
+
+    produto,
+
+    sabor,
+
+    -quantidade
+
+  );
+
+
+  return {
+
+    sucesso: true,
+
+    mensagem:
+      'Venda registrada com sucesso!'
+
+  };
+
+}
+
+
+// ==========================================
+// REGISTRAR COMPRA
+// ==========================================
+
+function registrarCompra(
+  usuario,
+  descricao,
+  valor,
+  pagamento
+) {
+
+  const aba =
+    PLANILHA.getSheetByName('COMPRAS');
+
+  if (!aba) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Aba COMPRAS não encontrada.'
+
+    };
+
+  }
+
+  valor =
+    Number(valor);
+
+
+  if (!descricao) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Informe a descrição da compra.'
+
+    };
+
+  }
+
+
+  if (
+    !valor ||
+    valor <= 0
+  ) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Informe um valor válido.'
+
+    };
+
+  }
+
+
+  if (!pagamento) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Selecione a forma de pagamento.'
+
+    };
+
+  }
+
+
+  const id =
+    aba.getLastRow();
+
+
+  aba.appendRow([
+
+    id,
+
+    new Date(),
+
+    usuario,
+
+    descricao,
+
+    valor,
+
+    pagamento
+
+  ]);
+
+
+  return {
+
+    sucesso: true,
+
+    mensagem:
+      'Compra registrada com sucesso!'
+
+  };
+
+}
+
+
+// ==========================================
+// OBTER ESTOQUE COMPLETO
+// ==========================================
+
+function obterEstoqueCompleto() {
+
+  const aba =
+    PLANILHA.getSheetByName('ESTOQUE');
+
+  if (!aba) {
+    return [];
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  return dados
+    .slice(1)
+    .map(function(linha) {
+
+      return {
+
+        produto: linha[0],
+
+        sabor: linha[1],
+
+        quantidade:
+          Number(linha[2]) || 0
+
+      };
+
+    });
+
+}
+
+
+// ==========================================
+// OBTER ESTOQUE DE PRODUTO + SABOR
+// ==========================================
+
+function obterEstoqueProduto(
+  produto,
+  sabor
+) {
+
+  const aba =
+    PLANILHA.getSheetByName('ESTOQUE');
+
+  if (!aba) {
+    return 0;
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  for (
+    let i = 1;
+    i < dados.length;
+    i++
+  ) {
+
+    if (
+
+      String(dados[i][0]).trim()
+        .toLowerCase() ===
+      String(produto).trim()
+        .toLowerCase()
+
+      &&
+
+      String(dados[i][1]).trim()
+        .toLowerCase() ===
+      String(sabor).trim()
+        .toLowerCase()
+
+    ) {
+
+      return Number(dados[i][2]) || 0;
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+
+// ==========================================
+// ATUALIZAR ESTOQUE
+// ==========================================
+
+function atualizarEstoqueProduto(
+  produto,
+  sabor,
+  valor
+) {
+
+  const aba =
+    PLANILHA.getSheetByName('ESTOQUE');
+
+  if (!aba) {
+    return false;
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  for (
+    let i = 1;
+    i < dados.length;
+    i++
+  ) {
+
+    if (
+
+      String(dados[i][0]).trim()
+        .toLowerCase() ===
+      String(produto).trim()
+        .toLowerCase()
+
+      &&
+
+      String(dados[i][1]).trim()
+        .toLowerCase() ===
+      String(sabor).trim()
+        .toLowerCase()
+
+    ) {
+
+      const atual =
+        Number(dados[i][2]) || 0;
+
+      const novo =
+        atual + Number(valor);
+
+      aba.getRange(i + 1, 3)
+        .setValue(novo);
+
+      return true;
+
+    }
+
+  }
+
+  return false;
+
+}
+
+
+// ==========================================
+// ADICIONAR ESTOQUE
+// ==========================================
+
+function adicionarEstoque(
+  produto,
+  sabor,
+  quantidade
+) {
+
+  quantidade =
+    Number(quantidade);
+
+  if (!produto) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Selecione o produto.'
+
+    };
+
+  }
+
+  if (!sabor) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Selecione o sabor.'
+
+    };
+
+  }
+
+  if (
+    isNaN(quantidade) ||
+    quantidade <= 0
+  ) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Digite uma quantidade válida.'
+
+    };
+
+  }
+
+  const existe =
+    obterEstoqueProduto(
+      produto,
+      sabor
+    );
+
+  const atualizado =
+    atualizarEstoqueProduto(
+      produto,
+      sabor,
+      quantidade
+    );
+
+  if (!atualizado) {
+
+    return {
+
+      sucesso: false,
+
+      mensagem:
+        'Produto e sabor não encontrados no estoque.'
+
+    };
+
+  }
+
+  return {
+
+    sucesso: true,
+
+    mensagem:
+      'Estoque atualizado com sucesso!',
+
+    estoque:
+      existe + quantidade
+
+  };
+
+}
+
+
+// ==========================================
+// HISTÓRICO DE VENDAS
+// ==========================================
+
+function obterVendas() {
+
+  const aba =
+    PLANILHA.getSheetByName('VENDAS');
+
+  if (!aba) {
+    return [];
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  return dados
+    .slice(1)
+    .reverse()
+    .slice(0, 100)
+    .map(function(linha) {
+
+      return {
+
+        id: linha[0],
+
+        data:
+          formatarDataServidor(
+            linha[1]
+          ),
+
+        vendedor: linha[2],
+
+        produto: linha[3],
+
+        sabor: linha[4],
+
+        quantidade:
+          linha[5],
+
+        valor:
+          linha[6],
+
+        pagamento:
+          linha[7]
+
+      };
+
+    });
+
+}
+
+
+// ==========================================
+// HISTÓRICO DE COMPRAS
+// ==========================================
+
+function obterCompras() {
+
+  const aba =
+    PLANILHA.getSheetByName('COMPRAS');
+
+  if (!aba) {
+    return [];
+  }
+
+  const dados =
+    aba.getDataRange().getValues();
+
+  return dados
+    .slice(1)
+    .reverse()
+    .slice(0, 100)
+    .map(function(linha) {
+
+      return {
+
+        id: linha[0],
+
+        data:
+          formatarDataServidor(
+            linha[1]
+          ),
+
+        usuario: linha[2],
+
+        descricao: linha[3],
+
+        valor: linha[4],
+
+        pagamento: linha[5]
+
+      };
+
+    });
+
+}
+
+
+// ==========================================
+// FECHAMENTO DO DIA
+// ==========================================
+
+function obterFechamento(dataEscolhida) {
+
+  const vendas =
+    PLANILHA.getSheetByName('VENDAS');
+
+  const compras =
+    PLANILHA.getSheetByName('COMPRAS');
+
+
+  let totalVendas = 0;
+
+  let quantidadeProdutos = 0;
+
+  let totalCompras = 0;
+
+
+  let pix = 0;
+
+  let dinheiro = 0;
+
+  let cartao = 0;
+
+  let ifood = 0;
+
+
+  const produtos = {};
+
+
+  let dataReferencia;
+
+
+  if (dataEscolhida) {
+
+    const partes =
+      dataEscolhida.split('-');
+
+    dataReferencia =
+      new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+      );
+
+  } else {
+
+    dataReferencia =
+      new Date();
+
+  }
+
+
+  // ========================================
+  // VENDAS
+  // ========================================
+
+  if (vendas) {
+
+    const dados =
+      vendas.getDataRange().getValues();
+
+    for (
+      let i = 1;
+      i < dados.length;
+      i++
+    ) {
+
+      const data =
+        new Date(dados[i][1]);
+
+      if (
+        mesmoDia(
+          data,
+          dataReferencia
+        )
+      ) {
+
+        const quantidade =
+          Number(dados[i][5]) || 0;
+
+        const valor =
+          Number(dados[i][6]) || 0;
+
+        const pagamento =
+          String(dados[i][7] || '')
+            .trim()
+            .toLowerCase();
+
+
+        totalVendas += valor;
+
+        quantidadeProdutos += quantidade;
+
+
+        if (pagamento === 'pix') {
+          pix += valor;
+        }
+
+        if (pagamento === 'dinheiro') {
+          dinheiro += valor;
+        }
+
+        if (
+          pagamento === 'cartão' ||
+          pagamento === 'cartao'
+        ) {
+          cartao += valor;
+        }
+
+        if (pagamento === 'ifood') {
+          ifood += valor;
+        }
+
+
+        const nomeProduto =
+          dados[i][3] +
+          ' - ' +
+          dados[i][4];
+
+
+        if (!produtos[nomeProduto]) {
+          produtos[nomeProduto] = 0;
+        }
+
+        produtos[nomeProduto] += quantidade;
+
+      }
+
+    }
+
+  }
+
+
+  // ========================================
+  // COMPRAS
+  // ========================================
+
+  if (compras) {
+
+    const dados =
+      compras.getDataRange().getValues();
+
+    for (
+      let i = 1;
+      i < dados.length;
+      i++
+    ) {
+
+      const data =
+        new Date(dados[i][1]);
+
+      if (
+        mesmoDia(
+          data,
+          dataReferencia
+        )
+      ) {
+
+        totalCompras +=
+          Number(dados[i][4]) || 0;
+
+      }
+
+    }
+
+  }
+
+
+  return {
+
+    data:
+      formatarDataServidor(
+        dataReferencia
+      ),
+
+    totalVendas:
+      totalVendas,
+
+    quantidadeProdutos:
+      quantidadeProdutos,
+
+    pix:
+      pix,
+
+    dinheiro:
+      dinheiro,
+
+    cartao:
+      cartao,
+
+    ifood:
+      ifood,
+
+    totalCompras:
+      totalCompras,
+
+    produtos:
+      produtos
+
+  };
+
+}
+
+
+// ==========================================
+// COMPARAR DATAS
+// ==========================================
+
+function mesmoDia(
+  data1,
+  data2
+) {
+
+  return (
+
+    data1.getDate() ===
+    data2.getDate()
+
+    &&
+
+    data1.getMonth() ===
+    data2.getMonth()
+
+    &&
+
+    data1.getFullYear() ===
+    data2.getFullYear()
+
+  );
+
+}
+
+
+// ==========================================
+// FORMATAR DATA
+// ==========================================
+
+function formatarDataServidor(data) {
+
+  if (!data) {
+    return '';
+  }
+
+  const d =
+    new Date(data);
+
+  return Utilities.formatDate(
+    d,
+    Session.getScriptTimeZone(),
+    'dd/MM/yyyy HH:mm'
+  );
+
+}
