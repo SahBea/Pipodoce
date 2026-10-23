@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f1e8;
+      color: #3d2b1f;
+    }
+
+    /* =========================
+       TOPO
+    ========================= */
+
+    .topo {
+      background: linear-gradient(135deg, #a71930, #7d0f22);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .usuario {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       MENU
+    ========================= */
+
+    .menu {
+      width: 100%;
+      background: #fff8ee;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ead9c5;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+    }
+
+    .menu button {
+      background: #d4a72c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu button:hover {
+      background: #b98d18;
+      transform: translateY(-1px);
+    }
+
+    .menu button.ativo {
+      background: #8f1629;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 50px;
+    }
+
+    /* =========================
+       TELAS
+    ========================= */
+
+    .tela {
+      display: none;
+    }
+
+    .tela.ativa {
+      display: block;
+    }
+
+    .titulo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #7d0f22;
+    }
+
+    .subtitulo {
+      color: #806f62;
+      margin-bottom: 25px;
+    }
+
+    /* =========================
+       CARDS
+    ========================= */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid #eadfce;
+    }
+
+    .card-titulo {
+      font-size: 14px;
+      color: #806f62;
+      margin-bottom: 10px;
+    }
+
+    .card-valor {
+      font-size: 27px;
+      font-weight: bold;
+      color: #7d0f22;
+    }
+
+    /* =========================
+       FORMULÁRIOS
+    ========================= */
+
+    .form-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid #eadfce;
+      max-width: 700px;
+    }
+
+    .campo {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #5d4637;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d8c7b4;
+      border-radius: 9px;
+      font-size: 15px;
+      background: white;
+      color: #3d2b1f;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #d4a72c;
+      box-shadow: 0 0 0 2px rgba(212,167,44,0.15);
+    }
+
+    .botao-principal {
+      background: #d4a72c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 22px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .botao-principal:hover {
+      background: #b98d18;
+    }
+
+    /* =========================
+       ESTOQUE
+    ========================= */
+
+    .estoque-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .estoque-card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid #eadfce;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    }
+
+    .estoque-produto {
+      font-weight: bold;
+      color: #7d0f22;
+      font-size: 17px;
+    }
+
+    .estoque-sabor {
+      color: #806f62;
+      margin-top: 5px;
+    }
+
+    .estoque-quantidade {
+      margin-top: 12px;
+      font-size: 23px;
+      font-weight: bold;
+      color: #3d2b1f;
+    }
+
+    .estoque-baixo {
+      margin-top: 8px;
+      color: #b22222;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       FECHAMENTO
+    ========================= */
+
+    .fechamento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .fechamento-card {
+      background: white;
+      border-radius: 15px;
+      padding: 22px;
+      border: 1px solid #eadfce;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    }
+
+    .fechamento-card h3 {
+      margin-top: 0;
+      color: #7d0f22;
+    }
+
+    .linha-fechamento {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid #eee3d7;
+    }
+
+    .linha-fechamento:last-child {
+      border-bottom: none;
+    }
+
+    .valor-fechamento {
+      font-weight: bold;
+    }
+
+    /* =========================
+       HISTÓRICO
+    ========================= */
+
+    .tabela-container {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+      border: 1px solid #eadfce;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th {
+      background: #8f1629;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 11px;
+      border-bottom: 1px solid #eee3d7;
+    }
+
+    tr:hover td {
+      background: #fffaf3;
+    }
+
+    /* =========================
+       MENSAGENS
+    ========================= */
+
+    .mensagem {
+      display: none;
+      padding: 13px 15px;
+      border-radius: 9px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .mensagem.sucesso {
+      display: block;
+      background: #e7f6e7;
+      color: #287328;
+      border: 1px solid #b9dfb9;
+    }
+
+    .mensagem.erro {
+      display: block;
+      background: #fde8e8;
+      color: #a12626;
+      border: 1px solid #efbcbc;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #7d0f22, #b21f38);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: #fffaf3;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+
+    .login-logo {
+      text-align: center;
+      font-size: 34px;
+      font-weight: bold;
+      color: #8f1629;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitulo {
+      text-align: center;
+      color: #806f62;
+      margin-bottom: 30px;
+    }
+
+    .login-botao {
+      width: 100%;
+      background: #d4a72c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-botao:hover {
+      background: #b98d18;
+    }
+
+    /* =========================
+       RESPONSIVO
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .estoque-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .fechamento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topo {
+        padding: 18px;
+      }
+
+      .logo {
+        font-size: 23px;
+      }
+
+      .usuario {
+        font-size: 13px;
+      }
+
+      .menu {
+        padding: 12px;
+      }
+
+      .menu button {
+        flex: 1 1 140px;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .container {
+        padding: 20px 12px 40px;
+      }
+
+      .estoque-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .titulo {
+        font-size: 24px;
+      }
+
+      .menu button {
+        font-size: 13px;
+        padding: 11px 10px;
+      }
+
+      .form-card {
+        padding: 18px;
+      }
+
+      .login-card {
+        padding: 25px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       LOGIN
+  ========================= -->
+
+  <div id="loginTela" class="login-container">
+
+    <div class="login-card">
+
+      <div class="login-logo">
+        PIPODOCE
+      </div>
+
+      <div class="login-subtitulo">
+        Sistema de Gestão
+      </div>
+
+      <div class="campo">
+        <label>Usuário</label>
+        <input
+          type="text"
+          id="loginUsuario"
+          placeholder="Digite seu usuário"
+        >
+      </div>
+
+      <div class="campo">
+        <label>Senha</label>
+        <input
+          type="password"
+          id="loginSenha"
+          placeholder="Digite sua senha"
+          onkeydown="if(event.key === 'Enter') fazerLogin()"
+        >
+      </div>
+
+      <button
+        class="login-botao"
+        onclick="fazerLogin()"
+      >
+        Entrar
+      </button>
+
+      <div id="mensagemLogin" class="mensagem"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       APLICAÇÃO
+  ========================= -->
+
+  <div id="app" style="display:none;">
+
+    <!-- TOPO -->
+
+    <div class="topo">
+
+      <div class="logo">
+        PIPODOCE
+      </div>
+
+      <div class="usuario" id="usuarioNome"></div>
+
+    </div>
+
+
+    <!-- =========================
+         MENU PRINCIPAL
+         FICA VISÍVEL EM TODAS AS TELAS
+    ========================= -->
+
+    <div class="menu">
+
+      <button
+        data-tela="dashboard"
+        onclick="mostrarTela('dashboard')"
+      >
+        🏠 Dashboard
+      </button>
+
+      <button
+        data-tela="venda"
+        onclick="mostrarTela('venda')"
+      >
+        🛒 Nova Venda
+      </button>
+
+      <button
+        data-tela="compra"
+        onclick="mostrarTela('compra')"
+      >
+        🧾 Nova Compra
+      </button>
+
+      <button
+        data-tela="estoque"
+        onclick="mostrarTela('estoque')"
+      >
+        📦 Estoque
+      </button>
+
+      <button
+        data-tela="fechamento"
+        onclick="mostrarTela('fechamento')"
+      >
+        📅 Fechamento
+      </button>
+
+      <button
+        data-tela="historico"
+        onclick="mostrarTela('historico')"
+      >
+        📋 Histórico
+      </button>
+
+    </div>
+
+
+    <div class="container">
+
+
+      <!-- =========================
+           DASHBOARD
+      ========================= -->
+
+      <div id="dashboard" class="tela ativa">
+
+        <div class="titulo">
+          Dashboard
+        </div>
+
+        <div class="subtitulo">
+          Resumo das movimentações de hoje
+        </div>
+
+
+        <div class="cards">
+
+          <div class="card">
+
+            <div class="card-titulo">
+              Vendas hoje
+            </div>
+
+            <div
+              class="card-valor"
+              id="dashboardVendas"
+            >
+              R$ 0,00
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-titulo">
+              Produtos vendidos
+            </div>
+
+            <div
+              class="card-valor"
+              id="dashboardQuantidade"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-titulo">
+              Compras hoje
+            </div>
+
+            <div
+              class="card-valor"
+              id="dashboardCompras"
+            >
+              R$ 0,00
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3 style="margin-top:0;color:#7d0f22;">
+            Bem-vinda ao sistema PIPODOCE! 🍿
+          </h3>
+
+          <p>
+            Utilize o menu acima para registrar vendas,
+            compras, consultar o estoque, realizar o
+            fechamento do dia ou consultar o histórico.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           NOVA VENDA
+      ========================= -->
+
+      <div id="venda" class="tela">
+
+        <div class="titulo">
+          Nova Venda
+        </div>
+
+        <div class="subtitulo">
+          Registre uma nova venda e atualize automaticamente o estoque.
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="campo">
+
+            <label>
+              Produto
+            </label>
+
+            <select
+              id="vendaProduto"
+              onchange="carregarSaboresVenda()"
+            >
+              <option value="">
+                Selecione o produto
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Sabor
+            </label>
+
+            <select
+              id="vendaSabor"
+            >
+              <option value="">
+                Selecione primeiro o produto
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Quantidade
+            </label>
+
+            <input
+              type="number"
+              id="vendaQuantidade"
+              min="1"
+              placeholder="Ex.: 2"
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Valor total da venda
+            </label>
+
+            <input
+              type="number"
+              id="vendaValor"
+              min="0"
+              step="0.01"
+              placeholder="Ex.: 24,00"
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Forma de pagamento
+            </label>
+
+            <select id="vendaPagamento">
+
+              <option value="">
+                Selecione
+              </option>
+
+              <option value="Pix">
+                Pix
+              </option>
+
+              <option value="Dinheiro">
+                Dinheiro
+              </option>
+
+              <option value="Cartão">
+                Cartão
+              </option>
+
+              <option value="iFood">
+                iFood
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            class="botao-principal"
+            onclick="registrarNovaVenda()"
+          >
+            Registrar Venda
+          </button>
+
+
+          <div
+            id="mensagemVenda"
+            class="mensagem"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           NOVA COMPRA
+      ========================= -->
+
+      <div id="compra" class="tela">
+
+        <div class="titulo">
+          Nova Compra
+        </div>
+
+        <div class="subtitulo">
+          Registre compras e despesas da PIPODOCE.
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="campo">
+
+            <label>
+              Descrição da compra
+            </label>
+
+            <input
+              type="text"
+              id="compraDescricao"
+              placeholder="Ex.: Chocolate branco"
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Valor
+            </label>
+
+            <input
+              type="number"
+              id="compraValor"
+              min="0"
+              step="0.01"
+              placeholder="Ex.: 50,00"
+            >
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Forma de pagamento
+            </label>
+
+            <select id="compraPagamento">
+
+              <option value="">
+                Selecione
+              </option>
+
+              <option value="Pix">
+                Pix
+              </option>
+
+              <option value="Dinheiro">
+                Dinheiro
+              </option>
+
+              <option value="Cartão">
+                Cartão
+              </option>
+
+              <option value="iFood">
+                iFood
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            class="botao-principal"
+            onclick="registrarNovaCompra()"
+          >
+            Registrar Compra
+          </button>
+
+
+          <div
+            id="mensagemCompra"
+            class="mensagem"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           ESTOQUE
+      ========================= -->
+
+      <div id="estoque" class="tela">
+
+        <div class="titulo">
+          Estoque
+        </div>
+
+        <div class="subtitulo">
+          Consulte e adicione produtos ao estoque.
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="campo">
+
+            <label>
+              Produto
+            </label>
+
+            <select
+              id="estoqueProduto"
+              onchange="carregarSaboresEstoque()"
+            >
+              <option value="">
+                Selecione o produto
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Sabor
+            </label>
+
+            <select id="estoqueSabor">
+
+              <option value="">
+                Selecione primeiro o produto
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label>
+              Quantidade para adicionar
+            </label>
+
+            <input
+              type="number"
+              id="estoqueQuantidade"
+              min="1"
+              placeholder="Ex.: 10"
+            >
+
+          </div>
+
+
+          <button
+            class="botao-principal"
+            onclick="adicionarProdutoEstoque()"
+          >
+            Adicionar ao Estoque
+          </button>
+
+
+          <div
+            id="mensagemEstoque"
+            class="mensagem"
+          ></div>
+
+        </div>
+
+
+        <div
+          id="estoqueLista"
+          class="estoque-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- =========================
+           FECHAMENTO
+      ========================= -->
+
+      <div id="fechamento" class="tela">
+
+        <div class="titulo">
+          Fechamento do Dia
+        </div>
+
+        <div class="subtitulo">
+          Consulte as movimentações de uma data específica.
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="campo">
+
+            <label>
+              Data
+            </label>
+
+            <input
+              type="date"
+              id="fechamentoData"
+              onchange="carregarFechamento()"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="fechamentoConteudo"
+          class="fechamento-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- =========================
+           HISTÓRICO
+      ========================= -->
+
+      <div id="historico" class="tela">
+
+        <div class="titulo">
+          Histórico
+        </div>
+
+        <div class="subtitulo">
+          Consulte as últimas vendas e compras registradas.
+        </div>
+
+
+        <div class="tabela-container">
+
+          <h3 style="color:#7d0f22;">
+            Últimas Vendas
+          </h3>
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Data</th>
+                <th>Vendedor</th>
+                <th>Produto</th>
+                <th>Sabor</th>
+                <th>Qtd.</th>
+                <th>Valor</th>
+                <th>Pagamento</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="tabelaVendas">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="tabela-container">
+
+          <h3 style="color:#7d0f22;">
+            Últimas Compras
+          </h3>
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Data</th>
+                <th>Usuário</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Pagamento</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="tabelaCompras">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    let nomeUsuarioLogado = '';
+    let produtosPipodoce = {};
+
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    function fazerLogin() {
+
+      const usuario =
+        document.getElementById('loginUsuario').value.trim();
+
+      const senha =
+        document.getElementById('loginSenha').value.trim();
+
+      if (!usuario || !senha) {
+
+        mostrarMensagem(
+          'mensagemLogin',
+          'Informe usuário e senha.',
+          'erro'
+        );
+
+        return;
+      }
+
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+
+          if (resultado.sucesso) {
+
+            nomeUsuarioLogado = resultado.nome;
+
+            document.getElementById('usuarioNome').textContent =
+              'Olá, ' + nomeUsuarioLogado;
+
+            document.getElementById('loginTela').style.display =
+              'none';
+
+            document.getElementById('app').style.display =
+              'block';
+
+            carregarTudo();
+
+            mostrarTela('dashboard');
+
+          } else {
+
+            mostrarMensagem(
+              'mensagemLogin',
+              resultado.mensagem,
+              'erro'
+            );
+
+          }
+
+        })
+        .withFailureHandler(function(erro) {
+
+          mostrarMensagem(
+            'mensagemLogin',
+            'Erro ao fazer login: ' + erro.message,
+            'erro'
+          );
+
+        })
+        .login(usuario, senha);
+
+    }
+
+
+    /* =========================
+       CARREGAMENTO INICIAL
+    ========================= */
+
+    function carregarTudo() {
+
+      carregarProdutos();
+      carregarDashboard();
+
+    }
+
+
+    /* =========================
+       PRODUTOS
+    ========================= */
+
+    function carregarProdutos() {
+
+      google.script.run
+        .withSuccessHandler(function(produtos) {
+
+          produtosPipodoce = produtos;
+
+          preencherProdutos('vendaProduto');
+          preencherProdutos('estoqueProduto');
+
+        })
+        .obterProdutos();
+
+    }
+
+
+    function preencherProdutos(idSelect) {
+
+      const select =
+        document.getElementById(idSelect);
+
+      if (!select) return;
+
+      select.innerHTML =
+        '<option value="">Selecione o produto</option>';
+
+      Object.keys(produtosPipodoce).forEach(function(produto) {
+
+        const option =
+          document.createElement('option');
+
+        option.value = produto;
+        option.textContent = produto;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+
+    function carregarSaboresVenda() {
+
+      const produto =
+        document.getElementById('vendaProduto').value;
+
+      const select =
+        document.getElementById('vendaSabor');
+
+      select.innerHTML = '';
+
+      if (!produto) {
+
+        select.innerHTML =
+          '<option value="">Selecione primeiro o produto</option>';
+
+        return;
+      }
+
+      select.innerHTML =
+        '<option value="">Selecione o sabor</option>';
+
+      produtosPipodoce[produto].forEach(function(sabor) {
+
+        const option =
+          document.createElement('option');
+
+        option.value = sabor;
+        option.textContent = sabor;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+
+    function carregarSaboresEstoque() {
+
+      const produto =
+        document.getElementById('estoqueProduto').value;
+
+      const select =
+        document.getElementById('estoqueSabor');
+
+      select.innerHTML = '';
+
+      if (!produto) {
+
+        select.innerHTML =
+          '<option value="">Selecione primeiro o produto</option>';
+
+        return;
+      }
+
+      select.innerHTML =
+        '<option value="">Selecione o sabor</option>';
+
+      produtosPipodoce[produto].forEach(function(sabor) {
+
+        const option =
+          document.createElement('option');
+
+        option.value = sabor;
+        option.textContent = sabor;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    function carregarDashboard() {
+
+      google.script.run
+        .withSuccessHandler(function(resumo) {
+
+          document.getElementById('dashboardVendas')
+            .textContent = formatarMoeda(resumo.vendas);
+
+          document.getElementById('dashboardQuantidade')
+            .textContent = resumo.quantidade;
+
+          document.getElementById('dashboardCompras')
+            .textContent = formatarMoeda(resumo.compras);
+
+        })
+        .obterResumo();
+
+    }
+
+
+    /* =========================
+       REGISTRAR VENDA
+    ========================= */
+
+    function registrarNovaVenda() {
+
+      const produto =
+        document.getElementById('vendaProduto').value;
+
+      const sabor =
+        document.getElementById('vendaSabor').value;
+
+      const quantidade =
+        document.getElementById('vendaQuantidade').value;
+
+      const valor =
+        document.getElementById('vendaValor').value;
+
+      const pagamento =
+        document.getElementById('vendaPagamento').value;
+
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+
+          if (resultado.sucesso) {
+
+            mostrarMensagem(
+              'mensagemVenda',
+              resultado.mensagem,
+              'sucesso'
+            );
+
+            document.getElementById('vendaProduto').value = '';
+            document.getElementById('vendaSabor').innerHTML =
+              '<option value="">Selecione primeiro o produto</option>';
+            document.getElementById('vendaQuantidade').value = '';
+            document.getElementById('vendaValor').value = '';
+            document.getElementById('vendaPagamento').value = '';
+
+            carregarDashboard();
+
+          } else {
+
+            mostrarMensagem(
+              'mensagemVenda',
+              resultado.mensagem,
+              'erro'
+            );
+
+          }
+
+        })
+        .withFailureHandler(function(erro) {
+
+          mostrarMensagem(
+            'mensagemVenda',
+            'Erro: ' + erro.message,
+            'erro'
+          );
+
+        })
+        .registrarVenda(
+          nomeUsuarioLogado,
+          produto,
+          sabor,
+          quantidade,
+          valor,
+          pagamento
+        );
+
+    }
+
+
+    /* =========================
+       REGISTRAR COMPRA
+    ========================= */
+
+    function registrarNovaCompra() {
+
+      const descricao =
+        document.getElementById('compraDescricao').value;
+
+      const valor =
+        document.getElementById('compraValor').value;
+
+      const pagamento =
+        document.getElementById('compraPagamento').value;
+
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+
+          if (resultado.sucesso) {
+
+            mostrarMensagem(
+              'mensagemCompra',
+              resultado.mensagem,
+              'sucesso'
+            );
+
+            document.getElementById('compraDescricao').value = '';
+            document.getElementById('compraValor').value = '';
+            document.getElementById('compraPagamento').value = '';
+
+            carregarDashboard();
+
+          } else {
+
+            mostrarMensagem(
+              'mensagemCompra',
+              resultado.mensagem,
+              'erro'
+            );
+
+          }
+
+        })
+        .withFailureHandler(function(erro) {
+
+          mostrarMensagem(
+            'mensagemCompra',
+            'Erro: ' + erro.message,
+            'erro'
+          );
+
+        })
+        .registrarCompra(
+          nomeUsuarioLogado,
+          descricao,
+          valor,
+          pagamento
+        );
+
+    }
+
+
+    /* =========================
+       ESTOQUE
+    ========================= */
+
+    function adicionarProdutoEstoque() {
+
+      const produto =
+        document.getElementById('estoqueProduto').value;
+
+      const sabor =
+        document.getElementById('estoqueSabor').value;
+
+      const quantidade =
+        document.getElementById('estoqueQuantidade').value;
+
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+
+          if (resultado.sucesso) {
+
+            mostrarMensagem(
+              'mensagemEstoque',
+              resultado.mensagem +
+              ' Estoque atual: ' +
+              resultado.estoque,
+              'sucesso'
+            );
+
+            document.getElementById('estoqueQuantidade').value = '';
+
+            carregarEstoque();
+
+          } else {
+
+            mostrarMensagem(
+              'mensagemEstoque',
+              resultado.mensagem,
+              'erro'
+            );
+
+          }
+
+        })
+        .withFailureHandler(function(erro) {
+
+          mostrarMensagem(
+            'mensagemEstoque',
+            'Erro: ' + erro.message,
+            'erro'
+          );
+
+        })
+        .adicionarEstoque(
+          produto,
+          sabor,
+          quantidade
+        );
+
+    }
+
+
+    function carregarEstoque() {
+
+      google.script.run
+        .withSuccessHandler(function(lista) {
+
+          const container =
+            document.getElementById('estoqueLista');
+
+          container.innerHTML = '';
+
+          lista.forEach(function(item) {
+
+            const card =
+              document.createElement('div');
+
+            card.className =
+              'estoque-card';
+
+            let aviso = '';
+
+            if (item.quantidade <= 5) {
+
+              aviso =
+                '<div class="estoque-baixo">' +
+                '⚠ Estoque baixo' +
+                '</div>';
+
+            }
+
+            card.innerHTML =
+
+              '<div class="estoque-produto">' +
+              item.produto +
+              '</div>' +
+
+              '<div class="estoque-sabor">' +
+              item.sabor +
+              '</div>' +
+
+              '<div class="estoque-quantidade">' +
+              item.quantidade +
+              ' unidade(s)' +
+              '</div>' +
+
+              aviso;
+
+            container.appendChild(card);
+
+          });
+
+        })
+        .obterEstoqueCompleto();
+
+    }
+
+
+    /* =========================
+       FECHAMENTO
+    ========================= */
+
+    function carregarFechamento() {
+
+      const campo =
+        document.getElementById('fechamentoData');
+
+      let data = campo.value;
+
+      if (!data) {
+
+        const hoje = new Date();
+
+        const ano =
+          hoje.getFullYear();
+
+        const mes =
+          String(hoje.getMonth() + 1)
+            .padStart(2, '0');
+
+        const dia =
+          String(hoje.getDate())
+            .padStart(2, '0');
+
+        data =
+          ano + '-' + mes + '-' + dia;
+
+        campo.value = data;
+
+      }
+
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+
+          mostrarFechamento(resultado);
+
+        })
+        .obterFechamento(data);
+
+    }
+
+
+    function mostrarFechamento(resultado) {
+
+      const container =
+        document.getElementById('fechamentoConteudo');
+
+      let produtosHTML = '';
+
+      const produtos =
+        resultado.produtos || {};
+
+      Object.keys(produtos).forEach(function(nome) {
+
+        produtosHTML +=
+
+          '<div class="linha-fechamento">' +
+
+            '<span>' +
+            nome +
+            '</span>' +
+
+            '<span class="valor-fechamento">' +
+            produtos[nome] +
+            ' un.' +
+            '</span>' +
+
+          '</div>';
+
+      });
+
+
+      container.innerHTML =
+
+        '<div class="fechamento-card">' +
+
+          '<h3>Resumo do Dia</h3>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Total de vendas</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.totalVendas) +
+            '</span>' +
+          '</div>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Produtos vendidos</span>' +
+            '<span class="valor-fechamento">' +
+              resultado.quantidadeProdutos +
+            '</span>' +
+          '</div>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Total de compras</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.totalCompras) +
+            '</span>' +
+          '</div>' +
+
+        '</div>' +
+
+
+        '<div class="fechamento-card">' +
+
+          '<h3>Por Forma de Pagamento</h3>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Pix</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.pix) +
+            '</span>' +
+          '</div>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Dinheiro</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.dinheiro) +
+            '</span>' +
+          '</div>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>Cartão</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.cartao) +
+            '</span>' +
+          '</div>' +
+
+          '<div class="linha-fechamento">' +
+            '<span>iFood</span>' +
+            '<span class="valor-fechamento">' +
+              formatarMoeda(resultado.ifood) +
+            '</span>' +
+          '</div>' +
+
+        '</div>' +
+
+
+        '<div class="fechamento-card" style="grid-column:1 / -1;">' +
+
+          '<h3>Produtos Vendidos</h3>' +
+
+          (
+            produtosHTML ||
+            '<p>Nenhum produto vendido nesta data.</p>'
+          ) +
+
+        '</div>';
+
+    }
+
+
+    /* =========================
+       HISTÓRICO
+    ========================= */
+
+    function carregarHistorico() {
+
+      carregarHistoricoVendas();
+      carregarHistoricoCompras();
+
+    }
+
+
+    function carregarHistoricoVendas() {
+
+      google.script.run
+        .withSuccessHandler(function(vendas) {
+
+          const tabela =
+            document.getElementById('tabelaVendas');
+
+          tabela.innerHTML = '';
+
+          if (!vendas || vendas.length === 0) {
+
+            tabela.innerHTML =
+              '<tr>' +
+                '<td colspan="7">' +
+                  'Nenhuma venda registrada.' +
+                '</td>' +
+              '</tr>';
+
+            return;
+          }
+
+
+          vendas.forEach(function(venda) {
+
+            const linha =
+              document.createElement('tr');
+
+            linha.innerHTML =
+
+              '<td>' +
+                venda.data +
+              '</td>' +
+
+              '<td>' +
+                venda.vendedor +
+              '</td>' +
+
+              '<td>' +
+                venda.produto +
+              '</td>' +
+
+              '<td>' +
+                venda.sabor +
+              '</td>' +
+
+              '<td>' +
+                venda.quantidade +
+              '</td>' +
+
+              '<td>' +
+                formatarMoeda(venda.valor) +
+              '</td>' +
+
+              '<td>' +
+                venda.pagamento +
+              '</td>';
+
+            tabela.appendChild(linha);
+
+          });
+
+        })
+        .obterVendas();
+
+    }
+
+
+    function carregarHistoricoCompras() {
+
+      google.script.run
+        .withSuccessHandler(function(compras) {
+
+          const tabela =
+            document.getElementById('tabelaCompras');
+
+          tabela.innerHTML = '';
+
+          if (!compras || compras.length === 0) {
+
+            tabela.innerHTML =
+              '<tr>' +
+                '<td colspan="5">' +
+                  'Nenhuma compra registrada.' +
+                '</td>' +
+              '</tr>';
+
+            return;
+          }
+
+
+          compras.forEach(function(compra) {
+
+            const linha =
+              document.createElement('tr');
+
+            linha.innerHTML =
+
+              '<td>' +
+                compra.data +
+              '</td>' +
+
+              '<td>' +
+                compra.usuario +
+              '</td>' +
+
+              '<td>' +
+                compra.descricao +
+              '</td>' +
+
+              '<td>' +
+                formatarMoeda(compra.valor) +
+              '</td>' +
+
+              '<td>' +
+                compra.pagamento +
+              '</td>';
+
+            tabela.appendChild(linha);
+
+          });
+
+        })
+        .obterCompras();
+
+    }
+
+
+    /* =========================
+       NAVEGAÇÃO ENTRE TELAS
+    ========================= */
+
+    function mostrarTela(nome) {
+
+      const telas =
+        document.querySelectorAll('.tela');
+
+      telas.forEach(function(tela) {
+
+        tela.classList.remove('ativa');
+
+      });
+
+
+      const telaSelecionada =
+        document.getElementById(nome);
+
+      if (telaSelecionada) {
+
+        telaSelecionada.classList.add('ativa');
+
+      }
+
+
+      /* Atualiza botão ativo */
+
+      const botoes =
+        document.querySelectorAll('.menu button');
+
+      botoes.forEach(function(botao) {
+
+        botao.classList.remove('ativo');
+
+        if (
+          botao.getAttribute('data-tela') === nome
+        ) {
+
+          botao.classList.add('ativo');
+
+        }
+
+      });
+
+
+      /* Carrega dados da tela */
+
+      if (nome === 'dashboard') {
+
+        carregarDashboard();
+
+      }
+
+
+      if (nome === 'estoque') {
+
+        carregarEstoque();
+
+      }
+
+
+      if (nome === 'fechamento') {
+
+        carregarFechamento();
+
+      }
+
+
+      if (nome === 'historico') {
+
+        carregarHistorico();
+
+      }
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
+    }
+
+
+    /* =========================
+       MENSAGENS
+    ========================= */
+
+    function mostrarMensagem(
+      id,
+      texto,
+      tipo
+    ) {
+
+      const elemento =
+        document.getElementById(id);
+
+      if (!elemento) return;
+
+      elemento.textContent = texto;
+
+      elemento.className =
+        'mensagem ' + tipo;
+
+      setTimeout(function() {
+
+        elemento.className =
+          'mensagem';
+
+        elemento.textContent = '';
+
+      }, 5000);
+
+    }
+
+
+    /* =========================
+       FORMATAÇÃO DE MOEDA
+    ========================= */
+
+    function formatarMoeda(valor) {
+
+      valor =
+        Number(valor) || 0;
+
+      return valor.toLocaleString(
+        'pt-BR',
+        {
+          style: 'currency',
+          currency: 'BRL'
+        }
+      );
+
+    }
+
+
+    /* =========================
+       INICIALIZAÇÃO
+    ========================= */
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function() {
+
+        mostrarTela('dashboard');
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
